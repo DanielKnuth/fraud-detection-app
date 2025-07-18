@@ -33,15 +33,16 @@ with col1:
         oldbalanceOrg = st.number_input("Old Balance (Origin)", min_value = 0.0, step = 10.0)
         oldbalanceDest = st.number_input("Old Balance (Destination)", min_value = 0.0, step = 10.0)
         newbalanceDest = st.number_input("New Balance (Destination)", min_value = 0.0, step = 10.0)
-        # Set a reference start time (e.g., Jan 1, 2024, 00:00)
+        
+        # Use date_input and time_input instead of datetime_input
+        date = st.date_input("Transaction Date", datetime(2024, 1, 1).date())
+        time = st.time_input("Transaction Time", datetime(2024, 1, 1, 12, 0).time())
+        user_datetime = datetime.combine(date, time)
+
+        # Convert datetime to step (hour difference)
         start_datetime = datetime(2024, 1, 1)
-
-        # Date & Time Picker
-        user_datetime = st.datetime_input("Transaction Date & Time", datetime(2024, 1, 1, 12, 0))
-
-        # Convert selected time to 'step' (1 step = 1 hour)
         step = int((user_datetime - start_datetime).total_seconds() // 3600)
-        step = max(1, min(step, 744))  # clamp step within valid model range
+        step = max(1, min(step, 744))  # Clamp between 1 and 744
 
 
         submitted = st.form_submit_button("Predict")
