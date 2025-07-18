@@ -28,7 +28,7 @@ with col1:
 
     with st.form("Prediction Form"):
         tx_type = st.selectbox('Transaction Type', ['CASH OUT', 'PAYMENT', 'TRANSFER', 'DEBIT'])
-        amount = st.number_input("Amount", min_value = 0, step = 10.0)
+        amount = st.number_input("Amount", min_value = 0.0, step = 10.0)
         oldbalanceOrg = st.number_input("Old Balance (Origin)", min_value = 0.0, step = 10.0)
         oldbalanceDest = st.number_input("Old Balance (Destination)", min_value = 0.0, step = 10.0)
         newbalanceDest = st.number_input("New Balance (Destination)", min_value = 0.0, step = 10.0)
