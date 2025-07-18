@@ -104,31 +104,31 @@ if submitted:
     prob = model.predict_proba(input_data)[0][1]
 
 # Display the results
-with col2:
-    st.header('📊 Prediction Result')
-    if pred == 1:
-        st.error(f"🚨 **Prediction:** Fraudulent Transaction")
-        st.progress(100)
-    else:
-        st.success("✅ **Prediction:** Transaction is Legitimate")
-        st.balloons()
+    with col2:
+        st.header('📊 Prediction Result')
+        if pred == 1:
+            st.error(f"🚨 **Prediction:** Fraudulent Transaction")
+            st.progress(100)
+        else:
+            st.success("✅ **Prediction:** Transaction is Legitimate")
+            st.balloons()
     
-    st.metric(label = 'Fraud Probability', value = f"{prob: .2%}")
-    show_gauge(prob)
+        st.metric(label = 'Fraud Probability', value = f"{prob: .2%}")
+        show_gauge(prob)
 
     # Risk Level Indicator
-    st.markdown("---")
-    st.markdown("### 🧠 Risk Level")
-    if prob > 0.8:
-        st.warning("🟥 **High Risk**: This transaction is highly likely to be fraudulent.")
-    elif prob > 0.5:
-        st.info("🟧 **Medium Risk**: There's a moderate chance of fraud.")
-    else:
-        st.success("🟩 **Low Risk**: This transaction is likely safe.")
+        st.markdown("---")
+        st.markdown("### 🧠 Risk Level")
+        if prob > 0.8:
+            st.warning("🟥 **High Risk**: This transaction is highly likely to be fraudulent.")
+        elif prob > 0.5:
+            st.info("🟧 **Medium Risk**: There's a moderate chance of fraud.")
+        else:
+            st.success("🟩 **Low Risk**: This transaction is likely safe.")
     # Gauge Color Legend
-    st.markdown("### 📘 Gauge Color Legend")
-    st.markdown("""
-    - 🟩 **Low Risk**: 0% – 50%  
-    - 🟧 **Medium Risk**: 50% – 80%  
-    - 🟥 **High Risk**: 80% – 100%
-    """)
+        st.markdown("### 📘 Gauge Color Legend")
+        st.markdown("""
+        - 🟩 **Low Risk**: 0% – 50%  
+        - 🟧 **Medium Risk**: 50% – 80%  
+        - 🟥 **High Risk**: 80% – 100%
+        """)
