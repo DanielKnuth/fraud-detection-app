@@ -5,6 +5,7 @@ import pandas as pd
 import numpy as np
 import joblib
 import matplotlib.pyplot as plt
+from datetime import datetime, timedelta
 
 # Loading Model
 
@@ -32,7 +33,16 @@ with col1:
         oldbalanceOrg = st.number_input("Old Balance (Origin)", min_value = 0.0, step = 10.0)
         oldbalanceDest = st.number_input("Old Balance (Destination)", min_value = 0.0, step = 10.0)
         newbalanceDest = st.number_input("New Balance (Destination)", min_value = 0.0, step = 10.0)
-        step = st.slider("Step (Hour of transaction)", 1, 744, 1)
+        # Set a reference start time (e.g., Jan 1, 2024, 00:00)
+        start_datetime = datetime(2024, 1, 1)
+
+        # Date & Time Picker
+        user_datetime = st.datetime_input("Transaction Date & Time", datetime(2024, 1, 1, 12, 0))
+
+        # Convert selected time to 'step' (1 step = 1 hour)
+        step = int((user_datetime - start_datetime).total_seconds() // 3600)
+        step = max(1, min(step, 744))  # clamp step within valid model range
+
 
         submitted = st.form_submit_button("Predict")
 
