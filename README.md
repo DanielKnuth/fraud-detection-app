@@ -1,3 +1,6 @@
+## 🚀 Live Link
+
+https://fraud-detection-app-dk.streamlit.app/
 
 # 💳 Fraud Detection Dashboard
 
