@@ -28,22 +28,52 @@ with col1:
     st.header("🔍 Transaction Input")
 
     with st.form("Prediction Form"):
-        tx_type = st.selectbox('Transaction Type', ['CASH OUT', 'PAYMENT', 'TRANSFER', 'DEBIT'])
-        amount = st.number_input("Amount", min_value = 0.0, step = 10.0)
-        oldbalanceOrg = st.number_input("Old Balance (Origin)", min_value = 0.0, step = 10.0)
-        oldbalanceDest = st.number_input("Old Balance (Destination)", min_value = 0.0, step = 10.0)
-        newbalanceDest = st.number_input("New Balance (Destination)", min_value = 0.0, step = 10.0)
-        
-        # Use date_input and time_input instead of datetime_input
+        st.markdown("#### 📝 Transaction Type & Amount")
+        tx_type = st.selectbox(
+            "Transaction Type",
+            ['CASH OUT', 'PAYMENT', 'TRANSFER', 'DEBIT'],
+            help="Select the type of transaction"
+        )
+
+        amount = st.number_input(
+            "💰 Transaction Amount",
+            min_value=0.0,
+            step=10.0,
+            help="The amount of money being transferred"
+        )
+
+        st.markdown("#### 👤 Sender (Origin Account)")
+        oldbalanceOrg = st.number_input(
+            "🏦 Sender's Account Balance *before* Transaction",
+            min_value=0.0,
+            step=10.0,
+            help="Account balance of the sender before this transaction occurred"
+        )
+
+        st.markdown("#### 👥 Receiver (Destination Account)")
+        oldbalanceDest = st.number_input(
+            "📤 Receiver's Balance *before* Transaction",
+            min_value=0.0,
+            step=10.0,
+            help="Balance in the recipient's account before the transaction"
+        )
+
+        newbalanceDest = st.number_input(
+            "📥 Receiver's Balance *after* Transaction",
+            min_value=0.0,
+            step=10.0,
+            help="Balance in the recipient's account after the transaction"
+        )
+
+        st.markdown("#### ⏱️ Transaction Date & Time")
         date = st.date_input("Transaction Date", datetime(2024, 1, 1).date())
         time = st.time_input("Transaction Time", datetime(2024, 1, 1, 12, 0).time())
         user_datetime = datetime.combine(date, time)
 
-        # Convert datetime to step (hour difference)
+        # Convert datetime to 'step'
         start_datetime = datetime(2024, 1, 1)
         step = int((user_datetime - start_datetime).total_seconds() // 3600)
-        step = max(1, min(step, 744))  # Clamp between 1 and 744
-
+        step = max(1, min(step, 744))  # Clamp to valid range
 
         submitted = st.form_submit_button("Predict")
 
@@ -72,12 +102,11 @@ def show_gauge(probability):
 # Process Input & Feature Engineering
 
 if submitted:
-
-    # Validation Checks
+    
     if amount > oldbalanceOrg:
-        st.warning("⚠️ Warning: Transaction amount exceeds origin account balance.")
+        st.warning("⚠️ Warning: Transaction amount exceeds sender’s available balance.")
     if newbalanceDest < oldbalanceDest:
-        st.warning("⚠️ Warning: Destination balance decreased — unusual for this transaction.")
+        st.warning("⚠️ Warning: Destination balance decreased — may indicate suspicious behavior.")
 
     input_data = pd.DataFrame([{
         'type': tx_type,
@@ -124,7 +153,7 @@ if submitted:
             st.success("✅ **Prediction:** Transaction is Legitimate")
             st.balloons()
     
-        st.metric(label = 'Fraud Probability', value = f"{prob: .2%}")
+        st.metric(label = 'Fraud Probability', value = f"{prob:.2%}")
         show_gauge(prob)
 
     # Risk Level Indicator
@@ -136,6 +165,7 @@ if submitted:
             st.info("🟧 **Medium Risk**: There's a moderate chance of fraud.")
         else:
             st.success("🟩 **Low Risk**: This transaction is likely safe.")
+    
     # Gauge Color Legend
         st.markdown("### 📘 Gauge Color Legend")
         st.markdown("""
